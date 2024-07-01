@@ -15,7 +15,7 @@ def get_client_ip(request):
 
 def get_location(request):
 
-    vistor_name = request.GET.get('visitor_name','guest')
+    vistor_name = request.GET.get(str('visitor_name','guest'))
 
     ip_address = get_client_ip(request) # getting ip address
     response = requests.get(f'https://ipapi.co/{ip_address}/json/').json() # uses the ip address to  get information 
