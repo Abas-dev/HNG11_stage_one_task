@@ -44,7 +44,7 @@ def get_location(request):
     location_data = {
         "client_ip": ip_address, # The IP address of the requester
         "location": response.get("city"), # The city of the requester
-        "greeting": f"Hello, {vistor_name}!, the temperature is {temp} degrees Celcius in {response.get("city")}"
+        "greeting": f"Hello, {vistor_name}!, the temperature is {temp} degrees Celsius in {response.get('city')}"
     }
     return JsonResponse(location_data)
 
