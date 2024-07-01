@@ -41,10 +41,12 @@ def get_location(request):
     #     "temp": temp
     # }
 
+    temp_celsius = temp - 273.15
+
     location_data = {
         "client_ip": ip_address, # The IP address of the requester
         "location": response.get("city"), # The city of the requester
-        "greeting": f"Hello, {vistor_name}!, the temperature is {temp:.2f} degrees Celsius in {response.get('city')}"
+        "greeting": f"Hello, {vistor_name}!, the temperature is {temp_celsius:.2f} degrees Celsius in {response.get('city')}"
     }
     return JsonResponse(location_data)
 
