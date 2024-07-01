@@ -15,33 +15,36 @@ def get_client_ip(request):
 
 def get_location(request):
 
-    ip_address = get_client_ip(request)
-    response = requests.get(f'https://ipapi.co/{ip_address}/json/').json()
+    vistor_name = request.get('visitor_name')
+
+    ip_address = get_client_ip(request) # getting ip address
+    response = requests.get(f'https://ipapi.co/{ip_address}/json/').json() # uses the ip address to  get information 
 
     lat = response.get("latitude")
     lon = response.get("longitude")
 
-    print("latitude",lat)
-    print("longitude",lon)
-
     API_key = os.getenv("API_key")
 
-    weather = requests.get(f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API_key}")
+    weather = requests.get(f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API_key}") #getting the weather from openweatherApi
 
     weather_data = weather.json()
     main_weather = weather_data.get('main')
-    print("work",main_weather)
     temp = main_weather.get('temp')
 
+    # location_data = {
+    #     "ip": ip_address,
+    #     "city": response.get("city"),
+    #     "region": response.get("region"),
+    #     "country": response.get("country_name"),
+    #     "lati": response.get("latitude"),
+    #     "long": response.get("longitude"),
+    #     "temp": temp
+    # }
+
     location_data = {
-        "ip": ip_address,
-        "city": response.get("city"),
-        "region": response.get("region"),
-        "country": response.get("country_name"),
-        "lati": response.get("latitude"),
-        "long": response.get("longitude"),
-        "temp": temp
+        "client_ip": ip_address, # The IP address of the requester
+        "location": response.get("city"), # The city of the requester
+        "greeting": f"Hello, {vistor_name}!, the temperature is {temp} degrees Celcius in {response.get("city")}"
     }
     return JsonResponse(location_data)
 
-# In your urls.py, you would then connect this view to a URL.
