@@ -26,7 +26,8 @@ def get_location(request):
     weather = requests.get(f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API_key}")
 
     weather_data = weather.json()
-    temp = weather_data["main"]["temp"]
+    main_weather = weather_data.get('main')
+    temp = main_weather.get('temp')
 
     location_data = {
         "ip": ip_address,
