@@ -1,6 +1,9 @@
 from django.http import JsonResponse
-import requests
-from django.contrib.gis.geoip2 import GeoIP2
+import requests 
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -12,16 +15,26 @@ def get_client_ip(request):
 
 def get_location(request):
 
-    g = GeoIP2(get_client_ip)
-    log_lat = g.lon_lat()
     ip_address = get_client_ip(request)
     response = requests.get(f'https://ipapi.co/{ip_address}/json/').json()
+
+    lat = response.get("latitude")
+    lon = response.get("longitude")
+
+    API_key = os.getenv("API_key")
+
+    weather = requests.get(f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API_key}")
+
+    print(weather)
+
     location_data = {
         "ip": ip_address,
         "city": response.get("city"),
         "region": response.get("region"),
         "country": response.get("country_name"),
-        "lat_lat": log_lat
+        "lati": response.get("latitude"),
+        "long": response.get("longitude"),
+        #"weather": weather
     }
     return JsonResponse(location_data)
 
