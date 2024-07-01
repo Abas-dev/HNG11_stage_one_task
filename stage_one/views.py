@@ -21,12 +21,16 @@ def get_location(request):
     lat = response.get("latitude")
     lon = response.get("longitude")
 
+    print("latitude",lat)
+    print("longitude",lon)
+
     API_key = os.getenv("API_key")
 
     weather = requests.get(f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API_key}")
 
     weather_data = weather.json()
     main_weather = weather_data.get('main')
+    print("work",main_weather)
     temp = main_weather.get('temp')
 
     location_data = {
